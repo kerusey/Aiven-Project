@@ -2,9 +2,12 @@ import aiohttp
 import asyncio
 import time
 import json
+import logging
 from kafka import KafkaProducer
 from collections.abc import AsyncIterable
 from os import environ
+
+logging.basicConfig(level=logging.INFO)
 
 
 class DataExporter:
@@ -42,6 +45,7 @@ class DataExporter:
     async def send_statistics_to_kafka(self) -> None:
         async for stats in self.collect_domains_stats():
             self.producer.send('host', json.dumps(stats).encode('utf-8'))
+            logging.info("Statistics have been successfully sent to Kafka!")
         self.producer.flush()
 
 

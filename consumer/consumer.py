@@ -2,6 +2,9 @@ from kafka import KafkaConsumer
 import psycopg2
 import json
 from os import environ
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class DatabaseHandler:
@@ -44,9 +47,9 @@ class DatabaseHandler:
                 '''
             )
             database.commit()
+            logging.info("Hosts table has been successfully created!")
         except psycopg2.errors.DuplicateTable:
-            pass
-            # might be logged buu whatever
+            logging.info("Hosts table is already excepts")
         finally:
             database.close()
 
@@ -98,6 +101,7 @@ class DataImporter:
         for partition_batch in message_batch.values():
             sql_sequence = self.database.compose_sql_sequence([json.loads(message.value.decode('utf-8')) | {'timestamp': message.timestamp} for message in partition_batch])
             self.database.execute_message_to_target_table(sql_sequence)
+            logging.info(f"{sql_sequence}\nhas been executed!")
 
 
 if __name__ == '__main__':
