@@ -20,9 +20,9 @@ class DataExporter:
         self.producer = KafkaProducer(
             bootstrap_servers=environ['kafka-bootstrap_servers'],
             security_protocol="SSL",
-            ssl_cafile="/service-secrets/ca.pem",
-            ssl_certfile="/service-secrets/service.cert",
-            ssl_keyfile="/service-secrets/service.key",
+            ssl_cafile="../service-secrets/ca.pem",
+            ssl_certfile="../service-secrets/service.cert",
+            ssl_keyfile="../service-secrets/service.key",
         )
 
     async def collect_domains_stats(self) -> AsyncIterable:
@@ -38,7 +38,8 @@ class DataExporter:
                         body = await response.text()
                         message_body = {'host': domain_name, 'status': response.status, 'request_time': time.time() - start_time}
                         if self.regular_expression_pattern:
-                            message_body['regex'] = search(self.regular_expression_pattern, body).span()
+                            search_result = search(self.regular_expression_pattern, body)
+                            message_body['regex'] = search_result.span() if search_result else None
                         yield message_body
                 except aiohttp.client_exceptions.ClientConnectorError:
                     yield {'host': domain_name, 'status': 404, 'request_time': 0}
@@ -61,7 +62,7 @@ if __name__ == "__main__":
                 "https://eqewqeqweqweqwe.com",  # 404
                 "https://intra.epitech.eu/planning/#"  # 401
             ],
-            regular_expression_pattern="name"
+            regular_expression_pattern="Danila Likh"
         ).send_statistics_to_kafka())
     finally:
         loop.run_until_complete(loop.shutdown_asyncgens())

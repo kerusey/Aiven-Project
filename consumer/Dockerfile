@@ -2,7 +2,7 @@ FROM python:latest
 WORKDIR /code
 
 COPY ./consumer ./
-COPY ./service-secrets /service-secrets
+COPY ./service-secrets ../service-secrets
 
 ENV database-name "host-statistics"
 ENV database-username "avnadmin"

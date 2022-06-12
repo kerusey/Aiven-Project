@@ -1,0 +1,25 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Python tests for tests.Test" type="tests" factoryName="Autodetect" nameIsGenerated="true">
+    <module name="AivenProject" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="database-host" value="pg-3b73cfc1-keruseyoff-1ead.aivencloud.com" />
+      <env name="database-name" value="host-statistics" />
+      <env name="database-password" value="AVNS_EAB_pkbi6QBQR882ehD" />
+      <env name="database-port" value="26981" />
+      <env name="database-username" value="avnadmin" />
+      <env name="kafka-bootstrap_servers" value="kafka-2859ed46-keruseyoff-1ead.aivencloud.com:26983" />
+    </envs>
+    <option name="SDK_HOME" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/producer" />
+    <option name="IS_MODULE_SDK" value="true" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <option name="_new_additionalArguments" value="&quot;&quot;" />
+    <option name="_new_target" value="&quot;tests.Test&quot;" />
+    <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

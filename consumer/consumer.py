@@ -83,9 +83,9 @@ class DataImporter:
             bootstrap_servers=environ['kafka-bootstrap_servers'],
             security_protocol="SSL",
             group_id='group-1',
-            ssl_cafile='/service-secrets/ca.pem',
-            ssl_certfile='/service-secrets/service.cert',
-            ssl_keyfile='/service-secrets/service.key',
+            ssl_cafile='../service-secrets/ca.pem',
+            ssl_certfile='../service-secrets/service.cert',
+            ssl_keyfile='../service-secrets/service.key',
             auto_offset_reset='earliest',
             enable_auto_commit=False
         )
