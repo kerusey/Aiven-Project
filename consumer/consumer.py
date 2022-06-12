@@ -1,8 +1,8 @@
+import logging
 from kafka import KafkaConsumer
 import psycopg2
 import json
 from os import environ
-import logging
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,7 +36,8 @@ class DatabaseHandler:
                         TIMESTAMP BIGINT NOT NULL,
                         DOMAIN VARCHAR(255) NOT NULL,
                         STATUS INT NOT NULL,
-                        REQUEST_TIME FLOAT NOT NULL
+                        REQUEST_TIME FLOAT NOT NULL,
+                        REGEX VARCHAR(255)
                     );
 
                     CREATE SEQUENCE hosts_id_seq
@@ -56,10 +57,11 @@ class DatabaseHandler:
     @staticmethod
     def compose_sql_sequence(messages_list: list[dict]) -> str:
         sql_sequence = '''
-            INSERT INTO HOSTS (TIMESTAMP, DOMAIN, STATUS, REQUEST_TIME) VALUES
+            INSERT INTO HOSTS (TIMESTAMP, DOMAIN, STATUS, REQUEST_TIME, REGEX) VALUES
         '''
         for message in messages_list:
-            sql_sequence += f"({message['timestamp']}, '{message['host']}', {message['status']}, {message['request_time']}),"
+            sql_sequence += f"({message['timestamp']}, '{message['host']}', {message['status']}, {message['request_time']}, {tuple(message['regex']) if message.get('regex') else 'NULL'}),"
+        logging.info(f"{sql_sequence}\nhas been executed!")
         return sql_sequence[:-1] + ';'
 
     def execute_message_to_target_table(self, sql_sequence: str) -> None:
@@ -101,7 +103,6 @@ class DataImporter:
         for partition_batch in message_batch.values():
             sql_sequence = self.database.compose_sql_sequence([json.loads(message.value.decode('utf-8')) | {'timestamp': message.timestamp} for message in partition_batch])
             self.database.execute_message_to_target_table(sql_sequence)
-            logging.info(f"{sql_sequence}\nhas been executed!")
 
 
 if __name__ == '__main__':
