@@ -61,7 +61,7 @@ class DatabaseHandler:
         '''
         for message in messages_list:
             sql_sequence += f"({message['timestamp']}, '{message['host']}', {message['status']}, {message['request_time']}, {tuple(message['regex']) if message.get('regex') else 'NULL'}),"
-        logging.info(f"{sql_sequence}\nhas been executed!")
+        logging.info(f"{sql_sequence[:-1] + ';'}\nhas been executed!")
         return sql_sequence[:-1] + ';'
 
     def execute_message_to_target_table(self, sql_sequence: str) -> None:

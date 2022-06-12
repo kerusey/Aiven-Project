@@ -52,18 +52,20 @@ class DataExporter:
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(DataExporter(
-            domain_name_list=[
-                "https://kerusey.com",
-                "https://google.com",
-                "https://aiven.io",
-                "https://eqewqeqweqweqwe.com",  # 404
-                "https://intra.epitech.eu/planning/#"  # 401
-            ],
-            regular_expression_pattern="Danila Likh"
-        ).send_statistics_to_kafka())
-    finally:
-        loop.run_until_complete(loop.shutdown_asyncgens())
-        loop.close()
+    while True:
+        loop = asyncio.get_event_loop()
+        try:
+            loop.run_until_complete(DataExporter(
+                domain_name_list=[
+                    "https://kerusey.com",
+                    "https://google.com",
+                    "https://aiven.io",
+                    "https://eqewqeqweqweqwe.com",  # 404
+                    "https://intra.epitech.eu/planning/#"  # 401
+                ],
+                regular_expression_pattern="Danila Likh"
+            ).send_statistics_to_kafka())
+        finally:
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.close()
+        time.sleep(10)  # change the frequency of the worker runs here

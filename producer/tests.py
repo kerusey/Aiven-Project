@@ -2,7 +2,7 @@ from producer import DataExporter
 from unittest import IsolatedAsyncioTestCase
 
 
-class Test(IsolatedAsyncioTestCase):
+class ProducerTests(IsolatedAsyncioTestCase):
     async def test_status_codes(self):
         self.valid_status_codes = {
             "https://kerusey.com": 200,
