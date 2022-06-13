@@ -1,10 +1,6 @@
-import logging
-from kafka import KafkaConsumer
 import psycopg2
-import json
 from os import environ
-
-logging.basicConfig(level=logging.INFO)
+import logging
 
 
 class DatabaseHandler:
@@ -40,8 +36,7 @@ class DatabaseHandler:
                         REGEX VARCHAR(255)
                     );
 
-                    CREATE SEQUENCE hosts_id_seq
-                        AS INTEGER;
+                    CREATE SEQUENCE hosts_id_seq AS INTEGER;
                     ALTER TABLE HOSTS
                         ALTER COLUMN id SET DEFAULT nextval('public.hosts_id_seq'::regclass);
                     ALTER SEQUENCE hosts_id_seq owned BY hosts.id;
@@ -56,6 +51,11 @@ class DatabaseHandler:
 
     @staticmethod
     def compose_sql_sequence(messages_list: list[dict]) -> str:
+        """
+        Creates sql insertion sequence to the database table
+        :param messages_list: message instances that have to be sent to the database
+        :return: sql sequence ready to be executed
+        """
         sql_sequence = '''
             INSERT INTO HOSTS (TIMESTAMP, DOMAIN, STATUS, REQUEST_TIME, REGEX) VALUES
         '''
@@ -75,37 +75,3 @@ class DatabaseHandler:
         cursor.execute(sql_sequence)
         database.commit()
         database.close()
-
-
-class DataImporter:
-    def __init__(self):
-        self.consumer = KafkaConsumer(
-            bootstrap_servers=environ['kafka-bootstrap_servers'],
-            security_protocol="SSL",
-            group_id='group-1',
-            ssl_cafile='../service-secrets/ca.pem',
-            ssl_certfile='../service-secrets/service.cert',
-            ssl_keyfile='../service-secrets/service.key',
-            auto_offset_reset='earliest',
-            enable_auto_commit=False
-        )
-        self.consumer.subscribe(topics='host')
-
-        self.database = DatabaseHandler()
-
-    def proceed_the_report(self) -> None:
-        """
-        Reads external kafka queue (uses At Most Once Consumer semantics) and writes data to the PostgreSQL
-        :return: None
-        """
-        message_batch = self.consumer.poll()
-        self.consumer.commit()
-        for partition_batch in message_batch.values():
-            sql_sequence = self.database.compose_sql_sequence([json.loads(message.value.decode('utf-8')) | {'timestamp': message.timestamp} for message in partition_batch])
-            self.database.execute_message_to_target_table(sql_sequence)
-
-
-if __name__ == '__main__':
-    data_importer_object = DataImporter()
-    while True:
-        data_importer_object.proceed_the_report()

@@ -1,4 +1,4 @@
-from producer import DataExporter
+from Producer import DataExporter
 from unittest import IsolatedAsyncioTestCase
 
 
@@ -17,7 +17,7 @@ class ProducerTests(IsolatedAsyncioTestCase):
             ]
         )
 
-        async for stats in data_exporter.collect_domains_stats():
+        async for stats in data_exporter.web_handler.collect_domains_stats():
             self.assertEqual(self.valid_status_codes[stats['host']], stats['status'])
 
     async def test_request_time(self):
@@ -31,7 +31,7 @@ class ProducerTests(IsolatedAsyncioTestCase):
             ]
         )
 
-        async for stats in data_exporter.collect_domains_stats():
+        async for stats in data_exporter.web_handler.collect_domains_stats():
             self.assertTrue(0 <= stats['request_time'] <= 1)
 
     async def test_regex_in_html_body(self):
@@ -50,5 +50,5 @@ class ProducerTests(IsolatedAsyncioTestCase):
             regular_expression_pattern=self.regex
         )
 
-        async for stats in data_exporter.collect_domains_stats():
+        async for stats in data_exporter.web_handler.collect_domains_stats():
             self.assertEqual(self.valid_regex_results[stats['host']], stats.get('regex'))
