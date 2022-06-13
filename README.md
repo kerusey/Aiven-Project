@@ -22,4 +22,9 @@ docker run producer
 cd Aiven-Project/producer
 pytest tests.py
 ```
+### To run tests for consumer
+```shell
+cd Aiven-Project/consumer
+pytest tests.py
+```
 It might require setting environments variables (such as bootstrap_servers for kafka)
