@@ -75,3 +75,9 @@ class DatabaseHandler:
         cursor.execute(sql_sequence)
         database.commit()
         database.close()
+
+    def request_data_from_table(self, table_name: str = "HOSTS"):
+        database = self.open_database()
+        cursor = database.cursor()
+        cursor.execute(f"SELECT * FROM {table_name}")
+        return cursor.fetchall()

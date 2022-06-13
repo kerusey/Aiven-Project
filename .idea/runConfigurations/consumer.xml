@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="consumer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <configuration default="false" name="Consumer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
     <module name="AivenProject" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
+      <env name="PYTHONUNBUFFERED" value="1" />
       <env name="database-host" value="pg-3b73cfc1-keruseyoff-1ead.aivencloud.com" />
       <env name="database-name" value="host-statistics" />
       <env name="database-password" value="AVNS_EAB_pkbi6QBQR882ehD" />
       <env name="database-port" value="26981" />
       <env name="database-username" value="avnadmin" />
       <env name="kafka-bootstrap_servers" value="kafka-2859ed46-keruseyoff-1ead.aivencloud.com:26983" />
-      <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/consumer" />
@@ -18,7 +18,7 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/consumer/consumer.py" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/consumer/Consumer.py" />
     <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />

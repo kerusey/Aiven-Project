@@ -6,7 +6,7 @@ from kafka import KafkaProducer
 from os import environ
 import sys
 
-from WebHandler import WebHandler
+from producer.WebHandler import WebHandler
 
 # https://github.com/encode/httpx/issues/914#issuecomment-622586610
 # this is a bug of python async package in windows causing a runtime error

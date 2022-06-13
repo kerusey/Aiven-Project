@@ -2,13 +2,14 @@ import logging
 from kafka import KafkaConsumer
 import json
 from os import environ
-from DatabaseHandler import DatabaseHandler
+
+from consumer.DatabaseHandler import DatabaseHandler
 
 logging.basicConfig(level=logging.INFO)
 
 
 class DataImporter:
-    def __init__(self):
+    def __init__(self, topics: set = ('host',)):
         self.consumer = KafkaConsumer(
             bootstrap_servers=environ['kafka-bootstrap_servers'],
             security_protocol="SSL",
@@ -19,7 +20,7 @@ class DataImporter:
             auto_offset_reset='earliest',
             enable_auto_commit=False
         )
-        self.consumer.subscribe(topics='host')
+        self.consumer.subscribe(topics=topics)
 
         self.database = DatabaseHandler()
 
